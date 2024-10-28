@@ -24,6 +24,12 @@ const Layout = () => {
                 />
                 <BottomNavigationAction 
                     component={Link}
+                    to= "/fetch"
+                    label="Fetch" 
+                    icon={<ScienceIcon />} 
+                />
+                <BottomNavigationAction 
+                    component={Link}
                     to= "/form"
                     label="Form" 
                     icon={<FavoriteIcon />} 

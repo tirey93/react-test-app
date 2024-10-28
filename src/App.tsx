@@ -6,8 +6,9 @@ import '@fontsource/roboto/700.css';
 
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import Layout from './components/Layout';
-import Dropdown from './components/Nav';
+import Dropdown from './components/Dropdown';
 import Form from './components/Form';
+import Fetch from './components/Fetch';
 
 function App() {
   return (
@@ -15,6 +16,7 @@ function App() {
       <Routes>
         <Route path="/" element={<Layout />}>
           <Route path="dropdown" element={<Dropdown />} />
+          <Route path="fetch" element={<Fetch />} />
           <Route path="form" element={<Form />} />
         </Route>
       </Routes>
