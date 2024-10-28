@@ -1,7 +1,6 @@
 import { Link, Outlet } from "react-router-dom";
 import React from 'react';
 import { BottomNavigation, BottomNavigationAction, Box } from '@mui/material';
-import RestoreIcon from '@mui/icons-material/Restore';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import ScienceIcon from '@mui/icons-material/Science';
 
