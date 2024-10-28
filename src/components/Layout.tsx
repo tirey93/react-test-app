@@ -3,24 +3,25 @@ import React from 'react';
 import { BottomNavigation, BottomNavigationAction, Box } from '@mui/material';
 import RestoreIcon from '@mui/icons-material/Restore';
 import FavoriteIcon from '@mui/icons-material/Favorite';
+import ScienceIcon from '@mui/icons-material/Science';
 
 const Layout = () => {
     const [value, setValue] = React.useState(-1);
     return ( 
         <>
-        <Box sx={{ width: 500, height: 100 }}>
+        <Box sx={{ height: 100 }}>
             <BottomNavigation
                 showLabels
                 value={value}
-                onChange={(event, newValue) => {
+                onChange={(_event, newValue) => {
                 setValue(newValue);
                 }}
             >
                 <BottomNavigationAction 
                     component={Link}
-                    to= "/nav"
-                    label="Nav" 
-                    icon={<RestoreIcon />} 
+                    to= "/dropdown"
+                    label="Dropdown" 
+                    icon={<ScienceIcon />} 
                 />
                 <BottomNavigationAction 
                     component={Link}
