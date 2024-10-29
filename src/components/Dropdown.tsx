@@ -1,5 +1,6 @@
 import { FormControl, InputLabel, MenuItem, Select, SelectChangeEvent, Stack, Typography } from "@mui/material";
 import { useState } from "react";
+import PropsState from "./PropsState";
 
 const Dropdown = () => {
     const [age, setAge] = useState(0);
@@ -69,6 +70,7 @@ const Dropdown = () => {
                 </Select>
             </FormControl>
             <Typography>{ageDet}</Typography>
+            <PropsState another="abc"/>
             </Stack>
         </>
      );

@@ -18,7 +18,6 @@ const Fetch = () => {
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
     const open = Boolean(anchorEl);
     const handleClick = (event: React.MouseEvent<HTMLElement>, id: number) => {
-      console.log(id);
       setAnchorEl(event.currentTarget);
       setCurrentId(id);
     };
@@ -89,22 +88,22 @@ const Fetch = () => {
                                 </TableCell>
                                 </TableRow>
                             ))}
-                            <Menu
-                                id="long-menu"
-                                anchorEl={anchorEl}
-                                open={open}
-                                onClose={handleClose}
-                            >
-                                <MenuItem onClick={handleClose}>Edit</MenuItem>
-                                <MenuItem onClick={handleClose}>Action</MenuItem>
-                                <MenuItem onClick={handleClose}>Remove</MenuItem>
-                            </Menu>
                             </TableBody>
                         </Table>
+
+                        <Menu
+                            id="long-menu"
+                            anchorEl={anchorEl}
+                            open={open}
+                            onClose={handleClose}
+                        >
+                            <MenuItem onClick={handleClose}>Edit</MenuItem>
+                            <MenuItem onClick={handleClose}>Action</MenuItem>
+                            <MenuItem onClick={handleClose}>Remove</MenuItem>
+                        </Menu>
                     </TableContainer>
                 )
             }
-             
         </>
      );
 }
