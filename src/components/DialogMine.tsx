@@ -1,5 +1,5 @@
 import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, TextField } from "@mui/material";
-import React, { useState } from "react";
+import React from "react";
 
 interface DialogMineProps {
     open: boolean;
@@ -37,7 +37,6 @@ class DialogMine extends React.Component<DialogMineProps, DialogMineState> {
                             event.preventDefault();
                             const formData = new FormData(event.currentTarget);
                             const formJson = Object.fromEntries((formData as any).entries());
-                            const email = formJson.email;
                             console.log(formJson);
                             this.props.handleClose();
                         },
