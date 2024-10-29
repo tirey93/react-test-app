@@ -9,6 +9,7 @@ import Layout from './components/Layout';
 import Dropdown from './components/Dropdown';
 import Form from './components/Form';
 import Fetch from './components/Fetch';
+import Login from './components/Login';
 
 function App() {
   return (
@@ -17,6 +18,7 @@ function App() {
         <Route path="/" element={<Layout />}>
           <Route path="dropdown" element={<Dropdown />} />
           <Route path="fetch" element={<Fetch />} />
+          <Route path="login" element={<Login />} />
           <Route path="form" element={<Form />} />
         </Route>
       </Routes>

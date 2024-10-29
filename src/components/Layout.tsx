@@ -3,6 +3,7 @@ import React from 'react';
 import { BottomNavigation, BottomNavigationAction, Box } from '@mui/material';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import ScienceIcon from '@mui/icons-material/Science';
+import LoginIcon from '@mui/icons-material/Login';
 
 const Layout = () => {
     const [value, setValue] = React.useState(-1);
@@ -33,6 +34,12 @@ const Layout = () => {
                     to= "/form"
                     label="Form" 
                     icon={<FavoriteIcon />} 
+                />
+                <BottomNavigationAction 
+                    component={Link}
+                    to= "/login"
+                    label="Login" 
+                    icon={<LoginIcon />} 
                 />
             </BottomNavigation>
         </Box>
