@@ -1,5 +1,7 @@
 import { Button, Container, TextField, Typography } from "@mui/material";
 import React from "react";
+import { CookiesProvider, useCookies } from 'react-cookie'
+
 
 interface LoginProps {
     
@@ -28,9 +30,10 @@ class Login extends React.Component<LoginProps, LoginState> {
             userResponse: null
         }
     }
+    
     onClickButton = async () => {
         console.log(this.state);
-
+        //no refresh token, only access token!
         try {
             const response = await fetch('https://localhost:7099/Authentication/Login', {
                 method: 'POST',
@@ -42,7 +45,7 @@ class Login extends React.Component<LoginProps, LoginState> {
                     username: this.state.login, // Użyj loginu ze stanu
                     password: this.state.password, // Użyj hasła ze stanu
                 }),
-                cache: "force-cache"
+                credentials: 'include' // Dodane credentials
             });
 
             console.log(response);
@@ -50,18 +53,13 @@ class Login extends React.Component<LoginProps, LoginState> {
                 const errorText = await response.text(); // Pobierz treść błędu
                 throw new Error(`HTTP error ${response.status}: ${errorText}`);
             }
-
+            
             let loginData = await response.json();
+
+            console.log(loginData);
             this.setState({userResponse: loginData});
-
-            // Przekierowanie lub inna akcja po udanym logowaniu
-            // np.: this.props.history.push('/dashboard');
-
-
         } catch (error) {
             console.error('Error during login:', error);
-            // Wyświetl komunikat o błędzie użytkownikowi
-            // np.: alert("Błąd logowania: " + error.message);
         }
     }
     render() { 
