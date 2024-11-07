@@ -1,39 +1,79 @@
 import { Button, Container, TextField, Typography } from "@mui/material";
-import React from "react";
-import { CookiesProvider, useCookies } from 'react-cookie'
+import React, { useEffect, useState } from "react";
 
-
-interface LoginProps {
-    
-}
- 
 interface UserResponse {
     id: number;
     name: string;
     displayName: string;
     role: string;
     reservationDisabled: boolean;
-  }
-
-interface LoginState {
-    login: string;
-    password: string;
-    userResponse: UserResponse | null;
 }
- 
-class Login extends React.Component<LoginProps, LoginState> {
-    constructor(props: LoginProps) {
-        super(props);
-        this.state = {
-            login: "",
-            password: "",
-            userResponse: null
-        }
-    }
+
+const Login: React.FC = () => {
+    const [login, setLogin] = useState("");
+    const [password, setPassword] = useState("");
+    const [userResponse, setUserResponse] = useState<UserResponse | null>(null);
+
+
+    useEffect(() => {
+        const fetchDataForPosts = async () => {
+            try {
+                const response = await fetch(`https://localhost:7099/User/LoggedIn`, {
+                    method: 'GET',
+                    headers: {
+                        'accept': 'text/plain',
+                        'Content-Type': 'application/json',
+                    },
+                    credentials: 'include'
+                });
     
-    onClickButton = async () => {
-        console.log(this.state);
-        //no refresh token, only access token!
+                console.log(response);
+                if (!response.ok) {
+                    const errorText = await response.text();
+                    throw new Error(`HTTP error ${response.status}: ${errorText}`); // Dodaj errorText do komunikatu
+                }
+    
+                const loginData = await response.json();
+    
+                console.log(loginData);
+                setUserResponse(loginData);
+            } catch (error) {
+                console.error('Error during login:', error);
+                // Dodaj tutaj obsługę błędów, np. wyświetlenie komunikatu użytkownikowi
+            }
+        };
+
+        fetchDataForPosts();
+    }, []);
+
+    const onLoggedOut = async () => {
+        console.log({ login, password }); 
+        try {
+            const response = await fetch(`https://localhost:7099/Authentication/Logout`, {
+                method: 'POST',
+                headers: {
+                    'accept': 'text/plain',
+                    'Content-Type': 'application/json',
+                },
+                credentials: 'include'
+            });
+
+            console.log(response);
+            if (!response.ok) {
+                const errorText = await response.text();
+                throw new Error(`HTTP error ${response.status}: ${errorText}`); // Dodaj errorText do komunikatu
+            }
+
+            setUserResponse(null);
+        } catch (error) {
+            console.error('Error during login:', error);
+            // Dodaj tutaj obsługę błędów, np. wyświetlenie komunikatu użytkownikowi
+        }
+    };
+
+
+    const onClickButton = async () => {
+        console.log({ login, password }); 
         try {
             const response = await fetch('https://localhost:7099/Authentication/Login', {
                 method: 'POST',
@@ -42,62 +82,60 @@ class Login extends React.Component<LoginProps, LoginState> {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({
-                    username: this.state.login, // Użyj loginu ze stanu
-                    password: this.state.password, // Użyj hasła ze stanu
+                    username: login,
+                    password: password,
                 }),
-                credentials: 'include' // Dodane credentials
+                credentials: 'include'
             });
 
             console.log(response);
             if (!response.ok) {
-                const errorText = await response.text(); // Pobierz treść błędu
-                throw new Error(`HTTP error ${response.status}: ${errorText}`);
+                const errorText = await response.text();
+                throw new Error(`HTTP error ${response.status}: ${errorText}`); // Dodaj errorText do komunikatu
             }
-            
-            let loginData = await response.json();
+
+            const loginData = await response.json();
 
             console.log(loginData);
-            this.setState({userResponse: loginData});
+            setUserResponse(loginData);
         } catch (error) {
             console.error('Error during login:', error);
+            // Dodaj tutaj obsługę błędów, np. wyświetlenie komunikatu użytkownikowi
         }
-    }
-    render() { 
+    };
 
-        return ( 
-            <>
-                <Container maxWidth="xs">
-                    <TextField
-                        autoFocus
-                        required
-                        margin="dense"
-                        id="login"
-                        name="login"
-                        label="Login"
-                        type="text"
-                        fullWidth
-                        value={this.state.login}
-                        onChange={(event) => this.setState({login: event.target.value})}
-                        />
-                    <TextField
-                        required
-                        margin="dense"
-                        id="passowrd"
-                        name="password"
-                        label="Password"
-                        type="password"
-                        fullWidth
-                        value={this.state.password}
-                        onChange={(event) => this.setState({password: event.target.value})}
-                        />
-                    <Button variant="contained" size="large" onClick={this.onClickButton}>Login</Button>
-                </Container>
-                {
-                    this.state.userResponse && <Typography>Hello {this.state.userResponse.displayName}</Typography>
-                }
-            </>
-         );
-    }
-}
- 
+    return (
+        <>
+            <Container maxWidth="xs">
+                <TextField
+                    autoFocus
+                    required
+                    margin="dense"
+                    id="login"
+                    name="login"
+                    label="Login"
+                    type="text"
+                    fullWidth
+                    value={login}
+                    onChange={(event) => setLogin(event.target.value)}
+                />
+                <TextField
+                    required
+                    margin="dense"
+                    id="password" // Poprawione id na "password"
+                    name="password"
+                    label="Password"
+                    type="password"
+                    fullWidth
+                    value={password}
+                    onChange={(event) => setPassword(event.target.value)}
+                />
+                <Button variant="contained" size="large" onClick={onClickButton}>Login</Button>
+                <Button variant="contained" size="large" onClick={onLoggedOut}>Log Out</Button>
+            </Container>
+            {userResponse && <Typography>Hello {userResponse.displayName}</Typography>}
+        </>
+    );
+};
+
 export default Login;
