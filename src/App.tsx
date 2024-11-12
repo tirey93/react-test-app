@@ -7,9 +7,9 @@ import '@fontsource/roboto/700.css';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import Layout from './components/Layout';
 import Dropdown from './components/Dropdown';
-import Form from './components/Form';
 import Fetch from './components/Fetch';
 import Login from './components/Login';
+import Pesel from './components/Pesel';
 
 function App() {
   return (
@@ -19,7 +19,7 @@ function App() {
           <Route path="dropdown" element={<Dropdown />} />
           <Route path="fetch" element={<Fetch />} />
           <Route path="login" element={<Login />} />
-          <Route path="form" element={<Form />} />
+          <Route path="pesel" element={<Pesel />} />
         </Route>
       </Routes>
     </BrowserRouter>

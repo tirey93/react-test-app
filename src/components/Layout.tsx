@@ -31,8 +31,8 @@ const Layout = () => {
                 />
                 <BottomNavigationAction 
                     component={Link}
-                    to= "/form"
-                    label="Form" 
+                    to= "/pesel"
+                    label="Pesel" 
                     icon={<FavoriteIcon />} 
                 />
                 <BottomNavigationAction 
