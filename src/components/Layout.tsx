@@ -31,6 +31,12 @@ const Layout = () => {
                 />
                 <BottomNavigationAction 
                     component={Link}
+                    to= "/webwork"
+                    label="Webwork" 
+                    icon={<ScienceIcon />} 
+                />
+                <BottomNavigationAction 
+                    component={Link}
                     to= "/pesel"
                     label="Pesel" 
                     icon={<FavoriteIcon />} 

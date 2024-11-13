@@ -10,6 +10,7 @@ import Dropdown from './components/Dropdown';
 import Fetch from './components/Fetch';
 import Login from './components/Login';
 import Pesel from './components/Pesel';
+import Webwork from './components/Webwork';
 
 function App() {
   return (
@@ -20,6 +21,7 @@ function App() {
           <Route path="fetch" element={<Fetch />} />
           <Route path="login" element={<Login />} />
           <Route path="pesel" element={<Pesel />} />
+          <Route path="webwork" element={<Webwork />} />
         </Route>
       </Routes>
     </BrowserRouter>
