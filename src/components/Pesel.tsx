@@ -1,16 +1,17 @@
-import { Button, Grid2, Stack, TextField } from "@mui/material";
+import { Button, Grid2, Stack, TextField, Typography } from "@mui/material";
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { DateValidationError, LocalizationProvider, PickerChangeHandlerContext } from "@mui/x-date-pickers";
 import dayjs, { Dayjs } from "dayjs";
 import { useState } from "react";
 import 'dayjs/locale/pl';
+import PeselCard from "./PeselCard";
 
 
 const Pesel = () => {
-  const [numbers, setNumbers] = useState("12345");
+  const [numbers, setNumbers] = useState("");
   const [numbersError, setNumbersError] = useState("");
-  const [date, setDate] = useState(dayjs('1999-12-31'));
+  const [date, setDate] = useState<dayjs.Dayjs | null>(null);
 
   const onDateChange = (value: Dayjs | null, context: PickerChangeHandlerContext<DateValidationError>) => {
     console.log(value)
@@ -43,37 +44,41 @@ const Pesel = () => {
   }
   return (
     <>
-      <Grid2 spacing={1} container sx={{maxWidth:'50vh'}}>
+      <Grid2 spacing={1} container sx={{ maxWidth: '80vh' }} alignItems={"center"}>
         <Grid2 size={4}>
-        <LocalizationProvider adapterLocale="pl" dateAdapter={AdapterDayjs}>
+          <LocalizationProvider adapterLocale="pl" dateAdapter={AdapterDayjs}>
             <DatePicker
               value={date}
               onChange={onDateChange}
               label="Wybierz datę" />
           </LocalizationProvider>
         </Grid2>
-        <Grid2 size={8}>
+        <Grid2 size={6}>
           <TextField
             required
             error={!!numbersError}
             helperText={numbersError}
             id="numbers"
             name="numbers"
-            label="Cyfry"
+            label="Wpisz cyfry"
             type="text"
+            placeholder="12345"
             fullWidth
             value={numbers}
             onChange={onNumberChanged}
           />
         </Grid2>
-        <Grid2 size={4}>
-          <Button variant="contained" size="large" >Login Out</Button>
+        <Grid2 size={2}>
+          <Button variant="contained" size="large" >Go</Button>
         </Grid2>
-        <Grid2 size={4}>
-          <Button variant="contained" size="large" >Log Out</Button>
+        <Grid2 size={12}>
+          <Typography>No Result</Typography>
         </Grid2>
-        <Grid2 size={4}>
-          <Button variant="contained" size="large" >Log Out</Button>
+        <Grid2 size={6}>
+          <Stack spacing={1}>
+            <PeselCard day={26} month={11} year={1998} digits="12346"></PeselCard>
+            <PeselCard day={26} month={11} year={1998} digits="12346"></PeselCard>
+          </Stack>
         </Grid2>
       </Grid2>
     </>
