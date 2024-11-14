@@ -20,7 +20,7 @@ const Pesel = () => {
   const [numbersError, setNumbersError] = useState("");
   const [date, setDate] = useState<dayjs.Dayjs | null>(null);
 
-  const [list, setList] = useState<PeselInfo[] | null>(null);
+  const [list, setList] = useState<PeselInfo[]>([]);
 
 
   const onDateChange = (value: Dayjs | null, context: PickerChangeHandlerContext<DateValidationError>) => {
@@ -29,7 +29,7 @@ const Pesel = () => {
 
   const onNumberChanged = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     let result = event.target.value;
-    if (result.length != 5) {
+    if (result.length != 5 && result.length != 0) {
       setNumbersError("Ilość cyfr musi być równa 5.")
     }
     else if (!containsDigit(result)) {
@@ -54,7 +54,20 @@ const Pesel = () => {
   }
 
   const onClick = () => {
-    const worker = new Worker(new URL('./webworkers/full_pesel.js', import.meta.url));
+    setList([])
+    if(date && numbers){
+      handleSinglePesel();
+    }
+    else if(date && !numbers){
+      handlePeselsByDate();
+    }
+    else if(!date && numbers){
+      console.log("only numbers");
+    }
+  }
+
+  const handleSinglePesel = () => {
+    const worker = new Worker(new URL('./webworkers/validate_one_pesel.js', import.meta.url));
     worker.postMessage({ day: date?.get("D"), month: (date?.get("M")! + 1), year: date?.get("y"), digits: numbers });
 
     worker.onmessage = function (e) {
@@ -76,11 +89,32 @@ const Pesel = () => {
       }
     };
   }
+  const handlePeselsByDate = () => {
+    const worker = new Worker(new URL('./webworkers/show_all_pesels.js', import.meta.url));
+    worker.postMessage({ day: date?.get("D"), month: (date?.get("M")! + 1), year: date?.get("y")});
+
+    worker.onmessage = function (e) {
+      const { error, result} = e.data;
+      if(error){
+        setError(true);
+      }
+      else if(result){
+        setList(oldArray => [...oldArray,{
+          date: dayjs(`${result.year}.${result.month}.${result.day}`),
+          sex: result.sex,
+          pesel: result.pesel,
+          digits: result.digits
+        }] );
+
+        setError(false);
+      }
+    };
+  }
   return (
     <>
       <Box maxWidth={"50vw"} alignItems={"center"}>
         <Grid2 spacing={2} container maxWidth={"30em"}>
-          <Grid2 size={4}>
+          <Grid2 size={5}>
             <LocalizationProvider adapterLocale="pl" dateAdapter={AdapterDayjs}>
               <DatePicker
                 value={date}
@@ -103,7 +137,7 @@ const Pesel = () => {
               onChange={onNumberChanged}
             />
           </Grid2>
-          <Grid2 size={2}>
+          <Grid2 size={1}>
             <Button variant="contained" size="large" onClick={onClick}>Go</Button>
           </Grid2>
           {
@@ -113,7 +147,7 @@ const Pesel = () => {
             </Grid2>
           }
         </Grid2>
-
+        
         <Grid2 container>
           {list &&
             list.map(p =>

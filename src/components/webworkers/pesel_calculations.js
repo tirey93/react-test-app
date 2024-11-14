@@ -24,7 +24,7 @@ function combinePesel(day, month, year, digits){
     
       let pesel = peselYear + peselMonth + peselDay + digits;
       
-      console.log("pesel", pesel);
+      // console.log("pesel", pesel);
       return pesel;
 }
 function isValidPesel(pesel) {
