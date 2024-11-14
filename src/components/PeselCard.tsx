@@ -1,29 +1,36 @@
-import { Card, CardContent, Stack, Typography } from "@mui/material";
+import { Card, CardContent, Grid2, Stack, Typography } from "@mui/material";
+import dayjs from "dayjs";
+import { PeselInfo } from "./Pesel";
 
-interface PeselInfo {
-    day: number
-    month: number
-    year: number
-    digits: string
-}
+
 const PeselCard = (props: PeselInfo) => {
     return (
-        <Card>
+        <Card sx={{ marginBottom: "10px", marginRight: "10px", marginTop: "10px", minWidth:"15em"}}>
             <CardContent>
-                <Stack direction={"row"} spacing={4}>
-                    <Typography variant="h5" component="div">
-                        {props.day}
-                    </Typography>
-                    <Typography variant="h5" component="div">
-                        {props.month}
-                    </Typography>
-                    <Typography variant="h5" component="div">
-                        {props.year}
-                    </Typography>
-                    <Typography variant="h5" component="div">
-                        {props.digits}
-                    </Typography>
-                </Stack>
+                <Grid2 container justifyContent={"space-between"}>
+                    <Grid2>
+                        <Typography gutterBottom sx={{ color: 'text.secondary', fontSize: 14 }}>
+                            {props.pesel}
+                        </Typography>
+                    </Grid2>
+                    <Grid2>
+                        <Typography gutterBottom sx={{ color: 'text.secondary', fontSize: 14 }}>
+                            {props.sex}
+                        </Typography>
+                    </Grid2>
+                </Grid2>
+                <Grid2 container justifyContent={"space-between"}>
+                    <Grid2>
+                        <Typography variant="h5">
+                            {props.date.format("DD.MM.YYYY")}
+                        </Typography>
+                    </Grid2>
+                    <Grid2>
+                        <Typography variant="h5">
+                            {props.digits}
+                        </Typography>
+                    </Grid2>
+                </Grid2>
             </CardContent>
         </Card>
     );
