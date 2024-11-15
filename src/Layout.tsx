@@ -37,12 +37,6 @@ const Layout = () => {
                 />
                 <BottomNavigationAction 
                     component={Link}
-                    to= "/pesel"
-                    label="Pesel" 
-                    icon={<FavoriteIcon />} 
-                />
-                <BottomNavigationAction 
-                    component={Link}
                     to= "/login"
                     label="Login" 
                     icon={<LoginIcon />} 
