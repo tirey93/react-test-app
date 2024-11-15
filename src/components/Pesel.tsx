@@ -17,6 +17,7 @@ export interface PeselInfo {
 const Pesel = () => {
   const [numbers, setNumbers] = useState("");
   const [error, setError] = useState(false);
+  const [counter, setCounter] = useState(0);
   const [numbersError, setNumbersError] = useState("");
   const [date, setDate] = useState<dayjs.Dayjs | null>(null);
 
@@ -55,14 +56,14 @@ const Pesel = () => {
 
   const onClick = () => {
     setList([])
-    if(date && numbers){
+    if (date && numbers) {
       handleSinglePesel();
     }
-    else if(date && !numbers){
+    else if (date && !numbers) {
       handlePeselsByDate();
     }
-    else if(!date && numbers){
-      console.log("only numbers");
+    else if (!date && numbers) {
+      handlePeselsByDigits();
     }
   }
 
@@ -71,12 +72,12 @@ const Pesel = () => {
     worker.postMessage({ day: date?.get("D"), month: (date?.get("M")! + 1), year: date?.get("y"), digits: numbers });
 
     worker.onmessage = function (e) {
-      const { error, result} = e.data;
-      if(error){
+      const { error, result } = e.data;
+      if (error) {
         setError(true);
         setList([]);
       }
-      else{
+      else {
         setList([
           {
             date: dayjs(`${result.year}.${result.month}.${result.day}`),
@@ -91,25 +92,50 @@ const Pesel = () => {
   }
   const handlePeselsByDate = () => {
     const worker = new Worker(new URL('./webworkers/show_all_pesels.js', import.meta.url));
-    worker.postMessage({ day: date?.get("D"), month: (date?.get("M")! + 1), year: date?.get("y")});
+    worker.postMessage({ day: date?.get("D"), month: (date?.get("M")! + 1), year: date?.get("y") });
 
     worker.onmessage = function (e) {
-      const { error, result} = e.data;
-      if(error){
+      const { error, result } = e.data;
+      if (error) {
         setError(true);
       }
-      else if(result){
-        setList(oldArray => [...oldArray,{
+      else if (result) {
+        setList(oldArray => [...oldArray, {
           date: dayjs(`${result.year}.${result.month}.${result.day}`),
           sex: result.sex,
           pesel: result.pesel,
           digits: result.digits
-        }] );
+        }]);
 
         setError(false);
       }
     };
   }
+  const handlePeselsByDigits = () => {
+    const worker = new Worker(new URL('./webworkers/find_valid_pesels.js', import.meta.url));
+    worker.postMessage({ digits: numbers });
+
+    worker.onmessage = function (e) {
+      const { error, result } = e.data;
+      if (error) {
+        setError(true);
+      }
+      else if (result) {
+        setList(oldArray => [...oldArray, {
+          date: dayjs(`${result.year}.${result.month}.${result.day}`),
+          sex: result.sex,
+          pesel: result.pesel,
+          digits: result.digits
+        }]);
+
+        setError(false);
+      }
+    };
+  }
+  function addCount(): void {
+    setCounter(counter + 1);
+  }
+
   return (
     <>
       <Box maxWidth={"50vw"} alignItems={"center"}>
@@ -147,7 +173,12 @@ const Pesel = () => {
             </Grid2>
           }
         </Grid2>
-        
+        {/* <Grid2 size={6}>
+          <Button onClick={addCount}>+</Button>
+        </Grid2>
+        <Grid2 size={6}>
+          <Typography>Counter: {counter}</Typography>
+        </Grid2> */}
         <Grid2 container>
           {list &&
             list.map(p =>
